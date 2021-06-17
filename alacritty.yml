@@ -29,11 +29,11 @@ colors:
 
 # fonts 
 
-font:
-   normal:
-     family: 'Fira Code'
-     style: 'Medium'
-   size: 16
+      #font:
+      #   normal:
+      #     family: 'sans'
+      #     style: 'Regular'
+      #   size: 16
        
 cursor:
   style: Block
