@@ -1,5 +1,5 @@
-
-from typing import List  # noqa: F401
+from libqtile import qtile
+from typing import List  
 from libqtile import bar, layout, widget
 from libqtile.config import Click, Drag, Group, Key, Screen
 from libqtile.lazy import lazy
@@ -106,8 +106,8 @@ colors = [["#242b38", "#242b38"], # panel background
 
 
 widget_defaults = dict(
-    font='Fira Code', # originally Ubuntu Mono
-    fontsize=13, # origin ally at 12
+    font='Ubuntu Mono', # originally Ubuntu Mono
+    fontsize=14, # origin ally at 12
     padding=2,   # originally 3
     background = colors[2]
 )
@@ -125,7 +125,7 @@ def init_widgets_list():
             widget.Image(
                        filename = "~/.config/qtile/icons/python-white.png",
                        scale = "False",
-                       mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn(myTerm)}
+                       mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn(terminal)}
                        ),
             widget.Sep(
                        linewidth = 0,
@@ -213,7 +213,8 @@ def init_widgets_list():
                        foreground = colors[2],
                        background = colors[5],
                        threshold = 90,
-                       padding = 5
+                       padding = 5,
+                       mouse_callbacks = {'Button1' : lambda : qtile.cmd_spawn(terminal + " -e sensors") }
                        ),
             widget.TextBox(
                        text='',
@@ -287,7 +288,8 @@ def init_widgets_list():
                        text = " ",
                        foreground = colors[2],
                        background = colors[4],
-                       padding = 5
+                       padding = 5,
+                       mouse_callbacks = {'Button3': lambda : qtile.cmd_spawn('pavucontrol') } 
                        ),
             widget.Volume(
                        foreground = colors[2],
