@@ -9,7 +9,10 @@ mod = "mod4"
 terminal = "alacritty"
 
 keys = [
-    # Switch between windows in current stack pane
+    Key([mod], "Return", lazy.spawn(terminal),
+        desc="Launching the terminal"),
+    Key([mod,"shift"], "d", lazy.spawn("env LC_ALL=en_US.UTF-8 dmenu_run -p 'Run : '"),
+        desc="Launch dmenu"),
     Key([mod], "k", lazy.layout.down(),
         desc="Move focus down in stack pane"),
     Key([mod], "j", lazy.layout.up(),
@@ -39,7 +42,7 @@ keys = [
 
     # Toggle between different layouts as defined below
     Key([mod], "Tab", lazy.next_layout(), desc="Toggle between layouts"),
-    Key([mod], "w", lazy.window.kill(), desc="Kill focused window"),
+    Key([mod], "q", lazy.window.kill(), desc="Kill focused window"),
 
     Key([mod, "control"], "r", lazy.restart(), desc="Restart qtile"),
     Key([mod, "control"], "q", lazy.shutdown(), desc="Shutdown qtile"),
@@ -65,10 +68,10 @@ for i, (name, kwargs) in enumerate(group_names, 1):
 
 
 
-layout_theme = {"border_width" : 2,
+layout_theme = {"border_width" : 1,
                 "margin" : 8,
-                "border_focus" : "e1acff",
-                "border_normal" : "1D2330"
+                "border_focus" : "",
+                "border_normal" : ""
                 }
 
 layouts = [
@@ -91,7 +94,7 @@ layouts = [
 
 
 
-colors = [["#282c34", "#282c34"], # panel background
+colors = [["#242b38", "#242b38"], # panel background
          ["#3d3f4b", "#434758"], # background for current screen tab
          ["#ffffff", "#ffffff"], # font color for group names
          ["#ff5555", "#ff5555"], # border line color for current tab
@@ -103,8 +106,8 @@ colors = [["#282c34", "#282c34"], # panel background
 
 
 widget_defaults = dict(
-    font='Ubuntu Mono',
-    fontsize=12, # origin ally at 12
+    font='Fira Code', # originally Ubuntu Mono
+    fontsize=13, # origin ally at 12
     padding=2,   # originally 3
     background = colors[2]
 )
@@ -114,70 +117,307 @@ extension_defaults = widget_defaults.copy()
 def init_widgets_list():
     widgets_list = [
             widget.Sep(
-                linewidth = 0,
-                padding = 6,
-                foreground = colors[2],
-                background = colors[0]
-                ),      
-            widget.GroupBox(
-                font="Ubuntu Bold",
-                fontsize = 10,
-                margin_y = 3,
-                margin_x = 0,
-                padding_y = 5,
-                padding_x = 3,
-                active = colors[2],
-                inactive = colors[7],
-                rounded = False,
-                highlight_color = colors[1],
-                highlight_method = "line",
-                this_current_screen_border = colors[6],
-                this_screen_border = colors[4],
-                other_current_screen_border = colors[6],
-                foreground = colors[2],
-                background = colors[0]
-                ),
+                       linewidth = 0,
+                       padding = 5,
+                       foreground = colors[2],
+                       background = colors[0]
+                       ),
+            widget.Image(
+                       filename = "~/.config/qtile/icons/python-white.png",
+                       scale = "False",
+                       mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn(myTerm)}
+                       ),
             widget.Sep(
-                linewidth = 0,
-                padding = 35,
-                foreground = colors[2],
-                background = colors[0]
-                ),
+                       linewidth = 0,
+                       padding = 6,
+                       foreground = colors[2],
+                       background = colors[0]
+                       ),
+            widget.GroupBox(
+                       font = "Ubuntu Bold",
+                       fontsize = 11,
+                       margin_y = 3,
+                       margin_x = 0,
+                       padding_y = 5,
+                       padding_x = 3,
+                       borderwidth = 3,
+                       active = colors[2],
+                       inactive = colors[7],
+                       rounded = False,
+                       highlight_color = colors[1],
+                       highlight_method = "line",
+                       this_current_screen_border = colors[6],
+                       this_screen_border = colors [4],
+                       other_current_screen_border = colors[6],
+                       other_screen_border = colors[4],
+                       foreground = colors[2],
+                       background = colors[0]
+                       ),
+            # widget.Prompt(
+            #            prompt = prompt,
+            #            font = "Ubuntu Mono",
+            #            padding = 10,
+            #            foreground = colors[3],
+            #            background = colors[1]
+            #            ),
+            widget.Sep(
+                       linewidth = 0,
+                       padding = 20,
+                       foreground = colors[2],
+                       background = colors[0]
+                       ),
             widget.WindowName(
-                foreground = colors[2],
-                background = colors[0],
-                padding = 0
-                ),
+                       foreground = colors[6],
+                       background = colors[0],
+                       padding = 0
+                       ),
+            # widget.Systray(
+            #            background = colors[0],
+            #            padding = 5
+            #            ),
+            widget.Sep(
+                       linewidth = 0,
+                       padding = 6,
+                       foreground = colors[0],
+                       background = colors[0]
+                       ),
             widget.TextBox(
-                text = "",
-                background = colors[0],
-                foreground = colors[4],
-                padding = 0,
-                fontsize = 37
-                ),
+                       text = '',
+                       background = colors[0],
+                       foreground = colors[4],
+                       padding = 0,
+                       fontsize = 43
+                       ),
             widget.Net(
-                interface = "wlp4s0",
-                format = "{down} ↓↑ {up}",
-                foreground = colors[2],
-                background = colors[4],
-                padding = 5
-                ),
+                       interface = "wlp4s0",
+                       format = '{down} ↓↑ {up}',
+                       foreground = colors[2],
+                       background = colors[4],
+                       padding = 5
+                       ),
+            widget.TextBox(
+                       text = '',
+                       background = colors[4],
+                       foreground = colors[5],
+                       padding = 0,
+                       fontsize = 43
+                       ),
+            widget.TextBox(
+                       text = "🌡",
+                       padding = 2,
+                       foreground = colors[2],
+                       background = colors[5],
+                       fontsize = 11
+                       ),
+            widget.ThermalSensor(
+                       foreground = colors[2],
+                       background = colors[5],
+                       threshold = 90,
+                       padding = 5
+                       ),
+            widget.TextBox(
+                       text='',
+                       background = colors[5],
+                       foreground = colors[4],
+                       padding = 0,
+                       fontsize = 43
+                       ),
+            widget.TextBox(
+                       text = "⟳",
+                       padding = 2,
+                       foreground = colors[2],
+                       background = colors[4],
+                       fontsize = 14
+                       ),
+            widget.CheckUpdates(
+                       update_interval = 1800,
+                       distro = "Arch_checkupdates",
+                       display_format = "{updates} Updates",
+                       foreground = colors[2],
+                       mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn(terminal + ' -e sudo pacman -Syu')},
+                       background = colors[4]
+                       ),
+            widget.TextBox(
+                       text = '',
+                       background = colors[4],
+                       foreground = colors[5],
+                       padding = 0,
+                       fontsize = 43
+                       ),
+            widget.TextBox(
+                       text = " 🖬",
+                       foreground = colors[2],
+                       background = colors[5],
+                       padding = 0,
+                       fontsize = 14
+                       ),
             widget.Memory(
-                foreground = colors[2],
-                background = colors[5],
-                padding = 5
-                ),
+                       foreground = colors[2],
+                       background = colors[5],
+                       mouse_callbacks = {'Button1': lambda: qtile.cmd_spawn(terminal + ' -e htop')},
+                       padding = 5
+                       ),
+            # widget.TextBox(
+            #            text='',
+            #            background = colors[5],
+            #            foreground = colors[4],
+            #            padding = 0,
+            #            fontsize = 37
+            #            ),
+            # widget.TextBox(
+            #            text = " ₿",
+            #            padding = 0,
+            #            foreground = colors[2],
+            #            background = colors[4],
+            #            fontsize = 12
+            #            ),
+            # widget.BitcoinTicker(
+            #            foreground = colors[2],
+            #            background = colors[4],
+            #            padding = 5
+            #            ),
+            widget.TextBox(
+                       text = '',
+                       background = colors[5],
+                       foreground = colors[4],
+                       padding = 0,
+                       fontsize = 43
+                       ),
+            widget.TextBox(
+                       text = " ",
+                       foreground = colors[2],
+                       background = colors[4],
+                       padding = 5
+                       ),
             widget.Volume(
-                foreground = colors[2],
-                background = colors[5],
-                padding = 5
-                ),
+                       foreground = colors[2],
+                       background = colors[4],
+                       padding = 5
+                       ),
+            widget.TextBox(
+                       text = '',
+                       background = colors[4],
+                       foreground = colors[5],
+                       padding = 0,
+                       fontsize = 43
+                       ),
+            # widget.CurrentLayoutIcon(
+            #            custom_icon_paths = [os.path.expanduser("~/.config/qtile/icons")],
+            #            foreground = colors[0],
+            #            background = colors[4],
+            #            padding = 0,
+            #            scale = 0.7
+            #            ),
+            widget.CurrentLayout(
+                       foreground = colors[2],
+                       background = colors[5],
+                       padding = 5
+                       ),
+            widget.TextBox(
+                       text = '',
+                       background = colors[5],
+                       foreground = colors[4],
+                       padding = 0,
+                       fontsize = 43
+                       ),
             widget.Clock(
-                foreground = colors[2],
-                background = colors[5],
-                format = "%A, %B %d - %H:%M "
-                ),
-
+                       foreground = colors[2],
+                       background = colors[4],
+                       format = "%A, %B %d - %H:%M "
+                       ),
+            widget.TextBox(
+                       text = '',
+                       background = colors[4],
+                       foreground = colors[5],
+                       padding = 0,
+                       fontsize = 43
+                       ),
+            widget.TextBox(
+                       text = " ",
+                       background = colors[5],
+                       foreground = colors[2],
+                       padding = 0,
+                       fontsize = 14
+                       ),
+            widget.Battery(
+                       background = colors[5],
+                       foreground = colors[2],
+                       padding = 5
+                       ),
+            # widget.Sep(
+            #     linewidth = 0,
+            #     padding = 6,
+            #     foreground = colors[2],
+            #     background = colors[0]
+            #     ),      
+            # widget.GroupBox(
+            #     font="Ubuntu Bold",
+            #     fontsize = 10,
+            #     margin_y = 3,
+            #     margin_x = 0,
+            #     padding_y = 5,
+            #     padding_x = 3,
+            #     active = colors[2],
+            #     inactive = colors[7],
+            #     rounded = False,
+            #     highlight_color = colors[1],
+            #     highlight_method = "line",
+            #     this_current_screen_border = colors[6],
+            #     this_screen_border = colors[4],
+            #     other_current_screen_border = colors[6],
+            #     foreground = colors[2],
+            #     background = colors[0]
+            #     ),
+            # widget.Sep(
+            #     linewidth = 0,
+            #     padding = 35,
+            #     foreground = colors[2],
+            #     background = colors[0]
+            #     ),
+            # widget.WindowName(
+            #     foreground = colors[2],
+            #     background = colors[0],
+            #     padding = 0
+            #     ),
+            # widget.TextBox(
+            #     text = "",
+            #     background = colors[0],
+            #     foreground = "#cb63ff",
+            #     padding = 0,
+            #     fontsize = 37
+            #     ),
+            # widget.Net(
+            #     interface = "wlp4s0",
+            #     format = "{down} ↓↑ {up}",
+            #     foreground = colors[2],
+            #     background = "#cb63ff",
+            #     padding = 5
+            #     ),
+            # widget.Memory(
+            #     foreground = colors[2],
+            #     background = colors[0],
+            #     padding = 5
+            #     ),
+            # widget.Volume(
+            #     foreground = colors[2],
+            #     background = colors[0],
+            #     padding = 5
+            #     ),
+            # widget.Clock(
+            #     foreground = colors[2],
+            #     background = colors[0],
+            #     format = "%A, %B %d - %H:%M "
+            #     ),
+            # widget.Systray(
+            #     background = colors[0],
+            #     padding = 5,
+            #     icon_size = 20
+            #         ),
+            # widget.Battery(
+            #     background = colors[0],
+            #     foreground = colors[2],
+            #     padding = 5
+            #         ),
             ]
 
 
@@ -190,17 +430,10 @@ def init_widgets_screen1():
     widgets_screen1 = init_widgets_list()
     return widgets_screen1
 
-def init_widgets_screen2():
-    widgets_screen2 = init_widgets_list()
-    return widgets_screen2
-
-
-widgets_screen2 = init_widgets_screen2()
 widgets_screen1 = init_widgets_screen1()
 
 def init_screens():
-    return [Screen(top=bar.Bar(widgets=init_widgets_screen1(), size=20, opacity=1)),
-           Screen(top=bar.Bar(widgets=init_widgets_screen2(),size=20,opacity=1))]
+    return [Screen(top=bar.Bar(widgets=init_widgets_screen1(), size=24, opacity=1))]
 
 screens = init_screens()
 
